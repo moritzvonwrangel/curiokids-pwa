@@ -1,0 +1,20 @@
+{
+  "name": "CurioKids",
+  "short_name": "CurioKids",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#fef6e4",
+  "theme_color": "#8bd3dd",
+  "icons": [
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
