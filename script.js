@@ -3,24 +3,71 @@ if ('serviceWorker' in navigator) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  const buttons = [
-    { id: 'showHelloBtn', file: 'public/hello.txt', label: 'Show Hello' },
-    { id: 'showHello2Btn', file: 'public/hello2.txt', label: 'Show Hello 2' },
-    { id: 'showHello3Btn', file: 'public/hello3.txt', label: 'Show Hello 3' }
+  // Animal data for both age groups
+  const animals = [
+    {
+      name: 'Crocodile',
+      images: {
+        '3-5': 'public/animals/crocodile/images/crocodile.bright.3-5.v1.png',
+        '5-10': 'public/animals/crocodile/images/crocodile.bright.5-10.v1.png'
+      },
+      texts: {
+        '3-5': 'public/animals/crocodile/wiki/crocodile.en.3-5.v1.txt',
+        '5-10': 'public/animals/crocodile/wiki/crocodile.en.5-10.v1.txt'
+      }
+    },
+    {
+      name: 'Dragonfly',
+      images: {
+        '3-5': 'public/animals/dragonfly/images/dragonfly.bright.3-5.v1.png',
+        '5-10': 'public/animals/dragonfly/images/dragonfly.bright.5-10.v1.png'
+      },
+      texts: {
+        '3-5': 'public/animals/dragonfly/wiki/dragonfly.en.3-5.v1.txt',
+        '5-10': 'public/animals/dragonfly/wiki/dragonfly.en.5-10.v1.txt'
+      }
+    },
+    {
+      name: 'Elephant',
+      images: {
+        '3-5': 'public/animals/elephant/images/elephant.bright.3-5.v1.png',
+        '5-10': 'public/animals/elephant/images/elephant.bright.5-10.v1.png'
+      },
+      texts: {
+        '3-5': 'public/animals/elephant/wiki/elephant.en.3-5.v1.txt',
+        '5-10': 'public/animals/elephant/wiki/elephant.en.5-10.v1.txt'
+      }
+    }
   ];
+
+  let ageGroup = '3-5';
   const helloDiv = document.getElementById('helloText');
   let activeIndex = null;
 
-  buttons.forEach((btn, idx) => {
-    const button = document.getElementById(btn.id);
-    if (button) {
-      button.addEventListener('click', async () => {
+  // Update images based on age group
+  function updateAnimalImages() {
+    animals.forEach((animal, idx) => {
+      const img = document.getElementById(`animalImg${idx + 1}`);
+      if (img) {
+        img.src = animal.images[ageGroup];
+      }
+    });
+    // Clear text when switching age group
+    helloDiv.textContent = '';
+    activeIndex = null;
+  }
+
+  // Button click logic
+  animals.forEach((animal, idx) => {
+    const btn = document.getElementById(`animalBtn${idx + 1}`);
+    if (btn) {
+      btn.addEventListener('click', async () => {
         if (activeIndex === idx) {
           helloDiv.textContent = '';
           activeIndex = null;
         } else {
           try {
-            const response = await fetch(btn.file);
+            const response = await fetch(animal.texts[ageGroup]);
             if (response.ok) {
               const text = await response.text();
               helloDiv.textContent = text;
@@ -37,4 +84,20 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }
   });
+
+  // Toggle switch logic
+  const toggle = document.getElementById('toggleSwitch');
+  const toggleLabel = document.getElementById('toggleLabel');
+  if (toggle && toggleLabel) {
+    toggle.addEventListener('change', () => {
+      ageGroup = toggle.checked ? '5-10' : '3-5';
+      toggleLabel.textContent = toggle.checked ? '5-10' : '3-5';
+      updateAnimalImages();
+    });
+    // Set initial label
+    toggleLabel.textContent = '3-5';
+  }
+
+  // Set initial images
+  updateAnimalImages();
 });
